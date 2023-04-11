@@ -1,0 +1,124 @@
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <title>4 Second  Assignment</title>
+</head>
+<body>
+<h1> Timer Game </h1>
+<h5>Press the Start button and try to stop the timer at exactly 4 seconds. </h5>
+<br/>
+<br/>
+
+<img src="https://static.vecteezy.com/system/resources/previews/000/583/361/original/timer-icon-vector.jpg"
+     width="200"
+     height="200" />
+<p></p>
+<style>
+
+</style>
+<!Makes sure you scroll down after you press the button to see you score. So you can see the table>
+<button type="button" class="btn btn-lg btn-success" id="button" onClick="firstClick()">Start</button>
+<p></p>
+<p id="resultTarget"></p>
+<p>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Attempts/Info
+  </button>
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+    <p id="totalA"></p>
+    <p id="totalInfo"></p>
+
+  </div>
+
+  <div class="card card-body">
+    <table class="table" id="resultTable">
+      <th>
+        <tr>
+          <th>Attempt Num</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>How Far Off</th>
+        </tr>
+      </th>
+      <tbody id="fullTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    let stopTime;
+    let startTime;
+    //These are the values or finding the min,max,sum,averages,etc
+    let max = 0;
+    let min = 0;
+    let sum = 0;
+    let average;
+    let n = 1;
+    const limit = 4000;
+    let results = [];
+
+
+    //This is the function allows you to click the button
+    //After the button is clicked the start and stop time of the click is then calculated.
+    function firstClick() {
+      if (button.innerHTML == "Start") {
+        button.innerHTML = "Stop";
+        startTime = Date.now();
+      } else {
+        button.innerHTML = "Start";
+        stopTime = Date.now();
+        let timeElapsed = (stopTime - startTime);
+
+        let variation = Math.abs(limit - timeElapsed);
+
+        //This is the code that determines what color the button turns to when you stop the timer. If its green then you hit it exactly at 4 seconds.
+        // If its blue then you are within the +/- .2 range. If its yellow then you clicked the button within .5 seconds of the 4 second mark. If its red then you clicked passed the
+        // 4 second
+        if (0 < variation && variation < 100) {
+          document.getElementById("button").style.backgroundColor = '#097969';
+        } else if (100 < variation && variation < 300) {
+          document.getElementById("button").style.backgroundColor = '#1434A4';
+        } else if (300 < variation && variation < 500) {
+          document.getElementById("button").style.backgroundColor = '#FAFA33';
+        } else if (variation >= 500) {
+          document.getElementById("button").style.backgroundColor = '#DC143C';
+        }
+
+        let startingTime = new Date(startTime).toString();
+        let endTime = new Date(stopTime).toString();
+
+        //This allows the starting time,end time,etd to show up on a table after its clicked.
+        $("#fullTable").append("<tr><th scope='row'>" + n + "</th><td>" + startingTime + "</td><td>" + endTime + "</td><td>" + variation + " ms</td></tr>");
+
+        results.push(variation);
+
+        if (variation < min || min == 0) {
+          min = variation;
+        }
+
+        if (variation > max || max == 0) {
+          max = variation;
+        }
+
+        sum += variation;
+
+        average = sum / n;
+
+        $("#totalInfo").text("Min: " + min / 1000 + " Seconds / Max: "  + max / 1000 + " Seconds / Average: " + average / 1000 + " Seconds");
+        $("#totalA").text("Your total Attempts are " + n + ".")
+        $("#resultTarget").text(" You are off by " + variation + " Milliseconds")
+
+        n += 1;
+
+      }
+    }
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
+</body>
+
+</html>
